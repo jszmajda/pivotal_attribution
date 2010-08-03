@@ -20,7 +20,7 @@ Can be anything [Chronic](http://rubygems.org/gems/chronic) accepts, like "Today
 
 ### Screenshots!
 
-(Names changed to protect the <strike>slackers</strike>innocent ;) )
+(Names changed to protect the innocent ;)
 
 ![pivotal_attribution](http://loki.ws/~josh/pivotal_attribution.png)
 
