@@ -1,7 +1,7 @@
 Pivotal Attribution
 ===================
 
-This is a simple reporting tool for Pivotal Tracker projects.
+This is a simple reporting tool for [Pivotal Tracker](http://www.pivotaltracker.com) projects.
 You need to download the CSV export from Pivotal Tracker and feed it into this script. You can get the CSV from your project by going to the "Actions" menu and select "Export CSV". Make sure all the checkboxes are checked and click "Export". You then feed this csv into the script as its first argument, a la:
 
     ./pivotal_attribution.rb <Your CSV File Here> <Optional Report Start Date>
