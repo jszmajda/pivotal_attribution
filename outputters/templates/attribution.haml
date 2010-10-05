@@ -1,0 +1,39 @@
+!!!
+%html
+
+  %head
+    %style
+      = style_sheet
+
+  %body
+    %h1= since
+
+    %h2 Points by user:
+    %table{:cellspacing => 0, :cellpadding => 0}
+      %thead
+        %tr
+          %td User
+          %td Complete
+          %td Pending
+      %tbody
+        - points_by_user.each do |user, complete, pending|
+          %tr
+            %td= user
+            %td{:class => class_for(complete)}= complete
+            %td{:class => class_for(pending, true)}= pending
+
+    %h2
+      = iterations_count
+      Iterations
+    %table{:cellspacing => 0, :cellpadding => 0}
+      %thead
+        %tr
+          %td User
+          - iteration_dates.each do |date|
+            %td= date.strftime("%m/%d")
+      %tbody
+        - users_and_iterations.each do |user, iterations|
+          %tr
+            %td= user
+            - iterations.each do |points|
+              %td{:class => class_for(points)}= points

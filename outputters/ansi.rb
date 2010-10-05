@@ -37,6 +37,9 @@ module Outputters
       puts "#{user_color("Total",max_username.length)} | #{iterations.collect{|itr| col_num(itr.values.sum, 5)}.join(" | ")} |"
     end
 
+    def complete!
+    end
+
     private
       def col_num(val, pad, inverse=false)
         v = val.to_i

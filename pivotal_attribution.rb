@@ -28,7 +28,7 @@ end
 
 user_stories = {}
 since = Chronic.parse(ARGV[1]) if ARGV[1]
-@out = Outputters::Ansi.new
+@out = Outputters::Html.new
 
 @out.since_header(since)
 
@@ -126,3 +126,4 @@ users.each do |user|
   @out.iterations_for_user(user, iterations)
 end
 @out.iterations_total(iterations)
+@out.complete!
