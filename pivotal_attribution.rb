@@ -6,6 +6,7 @@ gem 'activesupport', '= 2.3.9'
 require 'fastercsv'
 require 'chronic'
 require 'active_support'
+require 'outputters'
 
 if ARGV.length < 1
   usage =<<-EOT
@@ -25,29 +26,11 @@ if ARGV[2] && ARGV[2] == "faker"
   use_faker = true
 end
 
-def col_num(val, pad, inverse=false)
-  v = val.to_i
-  s = case v
-      when 0
-        inverse ? "1;33" : "1;30"
-      when (1..5)
-        inverse ? "1;33" : "1;31"
-      when (6..10)
-        inverse ? "1;32" : "1;34"
-      when (10..20)
-        inverse ? "1;34" : "1;32"
-      when (20..999999)
-        inverse ? "1;31" : "1;33"
-      end
-  "\e[#{s}m#{v.to_s.ljust(pad)}\e[0m"
-end
-def user_color(user, pad)
-  "\e[36m#{user.ljust(pad)}\e[0m"
-end
-
 user_stories = {}
 since = Chronic.parse(ARGV[1]) if ARGV[1]
-puts "\e[1;32mSince #{since || "Project Inception"}\e[0m"
+@out = Outputters::Ansi.new
+
+@out.since_header(since)
 
 iterations = []
 idates = []
@@ -118,29 +101,28 @@ FasterCSV.foreach(ARGV.first, :headers => true) do |row|
 end
 
 users = user_stories.keys.sort
-max_username = users.max{|a,b| a.length<=>b.length}
+@out.configure_users(users)
 
 total_complete = 0
 total_incomplete = 0
-puts "\n\e[1;32mPoints by user:\e[0m"
+
+@out.points_header
+
 users.each do |user|
   stories = user_stories[user]
-  u = user_color(user, max_username.length)
   complete = stories[:after][:complete].inject(0){|sum,st| sum + st["Estimate"].to_i }
   total_complete += complete
-  complete = "\e[32mComplete:\e[0m #{col_num complete, 3}"
   pending = stories[:after][:incomplete].inject(0){|sum,st| sum + st["Estimate"].to_i }
   total_incomplete += pending
-  pending = "\e[31mPending:\e[0m #{col_num pending, 3, true}"
-  puts "#{u} | #{complete} | #{pending}"
+
+  @out.points_per_user(user, complete, pending)
 end
+@out.points_per_user('Total', total_complete, total_incomplete)
 
-puts "#{user_color('Total', max_username.length)} | \e[32mComplete:\e[0m #{col_num total_complete, 3} | \e[32mPending:\e[0m #{col_num total_incomplete, 3, true}"
+@out.iterations_header(iterations)
 
-puts "\n\e[1;32m#{iterations.size} Iterations\e[0m"
-
-puts "#{"".ljust(max_username.length)} | #{idates.collect{|itr| "\e[33m"+itr.strftime("%m/%d").ljust(5) +"\e[0m"}.join(" | ")} |"
+@out.iterations_table_header(idates)
 users.each do |user|
-  puts "#{user_color(user,max_username.length)} | #{iterations.collect{|itr| col_num(itr[user], 5)}.join(" | ")} |"
+  @out.iterations_for_user(user, iterations)
 end
-puts "#{user_color("Total",max_username.length)} | #{iterations.collect{|itr| col_num(itr.values.sum, 5)}.join(" | ")} |"
+@out.iterations_total(iterations)
