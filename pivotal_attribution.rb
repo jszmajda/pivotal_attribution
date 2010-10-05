@@ -26,9 +26,19 @@ if ARGV[2] && ARGV[2] == "faker"
   use_faker = true
 end
 
+outputter = Outputters::Ansi
+if ARGV.grep /--outputter/
+  op = ARGV[ARGV.index('--outputter') + 1]
+  case op
+  when 'html'
+    outputter = Outputters::Html
+  end
+end
+
+
 user_stories = {}
 since = Chronic.parse(ARGV[1]) if ARGV[1]
-@out = Outputters::Html.new
+@out = outputter.new
 
 @out.since_header(since)
 
