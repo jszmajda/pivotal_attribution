@@ -1,6 +1,8 @@
 #!/usr/bin/ruby
 
 require 'rubygems'
+
+gem 'activesupport', '= 2.3.9'
 require 'fastercsv'
 require 'chronic'
 require 'active_support'
@@ -118,14 +120,22 @@ end
 users = user_stories.keys.sort
 max_username = users.max{|a,b| a.length<=>b.length}
 
+total_complete = 0
+total_incomplete = 0
 puts "\n\e[1;32mPoints by user:\e[0m"
 users.each do |user|
   stories = user_stories[user]
   u = user_color(user, max_username.length)
-  complete = "\e[32mComplete:\e[0m #{col_num stories[:after][:complete].inject(0){|sum,st| sum + st["Estimate"].to_i }, 3}"
-  pending = "\e[31mPending:\e[0m #{col_num stories[:after][:incomplete].inject(0){|sum,st| sum + st["Estimate"].to_i }, 3, true}"
+  complete = stories[:after][:complete].inject(0){|sum,st| sum + st["Estimate"].to_i }
+  total_complete += complete
+  complete = "\e[32mComplete:\e[0m #{col_num complete, 3}"
+  pending = stories[:after][:incomplete].inject(0){|sum,st| sum + st["Estimate"].to_i }
+  total_incomplete += pending
+  pending = "\e[31mPending:\e[0m #{col_num pending, 3, true}"
   puts "#{u} | #{complete} | #{pending}"
 end
+
+puts "#{user_color('Total', max_username.length)} | \e[32mComplete:\e[0m #{col_num total_complete, 3} | \e[32mPending:\e[0m #{col_num total_incomplete, 3, true}"
 
 puts "\n\e[1;32m#{iterations.size} Iterations\e[0m"
 
@@ -133,3 +143,4 @@ puts "#{"".ljust(max_username.length)} | #{idates.collect{|itr| "\e[33m"+itr.str
 users.each do |user|
   puts "#{user_color(user,max_username.length)} | #{iterations.collect{|itr| col_num(itr[user], 5)}.join(" | ")} |"
 end
+puts "#{user_color("Total",max_username.length)} | #{iterations.collect{|itr| col_num(itr.values.sum, 5)}.join(" | ")} |"
