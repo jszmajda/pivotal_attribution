@@ -18,9 +18,17 @@ for example:
 
 Can be anything [Chronic](http://rubygems.org/gems/chronic) accepts, like "Today", "Yesterday", "Two Months Ago", or "January 4th"
 
+### HTML Output
+
+If you run it with --outputter html, you will now get html-formatted output, a la [This sample](http://loki.ws/~josh/pivotal_attribution_sample.html)
+
+    ./pivotal_attribution.rb <Your CSV File Here> <Optional Report Start Date> --outputter html
+
 ### Screenshots!
 
 (Names changed to protect the innocent ;)
+
+[HTML Output Sample](http://loki.ws/~josh/pivotal_attribution_sample.html)
 
 ![pivotal_attribution](http://loki.ws/~josh/pivotal_attribution.png)
 
