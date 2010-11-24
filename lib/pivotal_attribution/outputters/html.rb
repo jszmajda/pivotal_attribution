@@ -35,10 +35,13 @@ module Outputters
       @model.users_and_iterations << ['Total', iterations.collect{|i| i.values.sum}]
     end
 
-    def complete!
+    def complete
       # write html
       @model.style_sheet = Sass::Engine.new(File.read(File.join(File.dirname(__FILE__), 'templates', 'style.scss')), :syntax => :scss).render
-      puts Haml::Engine.new(File.read(File.join(File.dirname(__FILE__), 'templates', 'attribution.haml'))).render(@model)
+      Haml::Engine.new(File.read(File.join(File.dirname(__FILE__), 'templates', 'attribution.haml'))).render(@model)
+    end
+    def complete!
+      puts complete
     end
 
     class Model
