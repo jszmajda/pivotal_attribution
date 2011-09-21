@@ -2,7 +2,7 @@
 
 require 'rubygems'
 
-gem 'activesupport', '= 2.3.9'
+gem 'activesupport', '>= 2.3.9'
 require 'fastercsv'
 require 'chronic'
 require 'active_support'
@@ -27,7 +27,7 @@ if ARGV[2] && ARGV[2] == "faker"
 end
 
 outputter = Outputters::Ansi
-if ARGV.grep /--outputter/
+unless (ARGV.grep /--outputter/).empty?
   op = ARGV[ARGV.index('--outputter') + 1]
   case op
   when 'html'
@@ -89,7 +89,7 @@ FasterCSV.foreach(ARGV.first, :headers => true) do |row|
 
   complete = row["Current State"] == "accepted" ? :complete : :incomplete
   at = row["Accepted at"]
-  at = at.blank? ? nil : Time.parse(at)
+  at = at.nil? || at.empty? ? nil : Time.parse(at)
   whenly = at.nil? || at > since ? :after : :before
 
   user_stories[u][whenly][complete] << row if row["Story Type"] == "feature"

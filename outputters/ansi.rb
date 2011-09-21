@@ -34,7 +34,7 @@ module Outputters
     end
 
     def iterations_total(iterations)
-      puts "#{user_color("Total",max_username.length)} | #{iterations.collect{|itr| col_num(itr.values.sum, 5)}.join(" | ")} |"
+      puts "#{user_color("Total",max_username.length)} | #{iterations.collect{|itr| col_num(itr.values.inject{|sum, x| sum + x}, 5)}.join(" | ")} |"
     end
 
     def complete!
