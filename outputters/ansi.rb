@@ -1,6 +1,11 @@
 module Outputters
   class Ansi
     attr_accessor :max_username
+    attr_accessor :separator
+
+    def initialize(sep)
+      self.separator = sep
+    end
 
     def configure_users(users)
       @max_username = users.max{|a,b| a.length<=>b.length}
@@ -18,7 +23,7 @@ module Outputters
       u = user_color(user, max_username.length)
       complete = "\e[32mComplete:\e[0m #{col_num complete, 3}"
       pending = "\e[31mPending:\e[0m #{col_num pending, 3, true}"
-      puts "#{u} | #{complete} | #{pending}"
+      puts "#{u}#{separator}#{complete}#{separator}#{pending}"
     end
 
     def iterations_header(iterations)
@@ -26,15 +31,15 @@ module Outputters
     end
 
     def iterations_table_header(idates)
-      puts "#{"".ljust(max_username.length)} | #{idates.collect{|itr| "\e[33m"+itr.strftime("%m/%d").ljust(5) +"\e[0m"}.join(" | ")} |"
+      puts "#{"".ljust(max_username.length)}#{separator}#{idates.collect{|itr| "\e[33m"+itr.strftime("%m/%d").ljust(5) +"\e[0m"}.join("#{separator}")}"
     end
     
     def iterations_for_user(user, iterations)
-      puts "#{user_color(user,max_username.length)} | #{iterations.collect{|itr| col_num(itr[user], 5)}.join(" | ")} |"
+      puts "#{user_color(user,max_username.length)}#{separator}#{iterations.collect{|itr| col_num(itr[user], 5)}.join("#{separator}")}"
     end
 
     def iterations_total(iterations)
-      puts "#{user_color("Total",max_username.length)} | #{iterations.collect{|itr| col_num(itr.values.inject{|sum, x| sum + x}, 5)}.join(" | ")} |"
+      puts "#{user_color("Total",max_username.length)}#{separator}#{iterations.collect{|itr| col_num(itr.values.inject{|sum, x| sum + x}, 5)}.join("#{separator}")}"
     end
 
     def complete!
