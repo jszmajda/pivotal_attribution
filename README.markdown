@@ -32,3 +32,7 @@ If you run it with --outputter html, you will now get html-formatted output, a l
 
 ![pivotal_attribution](http://loki.ws/~josh/pivotal_attribution.png)
 
+### TODO
+
+* This project currently relies on activesupport < 3.0. That sucks
+* This really needs to be a gem
