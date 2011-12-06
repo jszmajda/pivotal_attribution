@@ -32,7 +32,7 @@ module Outputters
     end
 
     def iterations_total(iterations)
-      @model.users_and_iterations << ['Total', iterations.collect{|i| i.values.sum}]
+      @model.users_and_iterations << ['Total', iterations.collect{|i| i.values.inject(0){|s,v| s+v}}]
     end
 
     def complete!
@@ -50,7 +50,7 @@ module Outputters
       end
 
       def class_for(val, invert=false)
-        return '' if val.blank?
+        return '' if (val.nil? || val == '')
         v = val.to_i
         case v
         when 0
