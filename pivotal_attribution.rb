@@ -35,10 +35,17 @@ unless (ARGV.grep /--outputter/).empty?
   end
 end
 
+if outputter == Outputters::Ansi
+  unless (ARGV.grep /--tabs/).empty?
+    separator = "\t"
+  else
+    separator = " | "
+  end
+end
 
 user_stories = {}
 since = Chronic.parse(ARGV[1]) if ARGV[1]
-@out = outputter.new
+@out = outputter.new(separator)
 
 @out.since_header(since)
 
