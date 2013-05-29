@@ -36,3 +36,7 @@ If you run it with --outputter html, you will now get html-formatted output, a l
 
 * This project currently relies on activesupport < 3.0. That sucks
 * This really needs to be a gem
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/joshsz/pivotal_attribution/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
